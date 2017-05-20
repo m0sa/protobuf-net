@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <Description>Static code analyzer to detect common mistakes or potential issues in C# consuming consuming the protobuf-net library</Description>
+    <PackageTags>analyzers protobuf protobuf-net</PackageTags>
+    <Authors>m0sa</Authors>
+    <DebugType>embedded</DebugType>
+
+    <!-- Analyzers should not be added to the lib folder. -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="tools\*.ps1" Pack="true" PackagePath="tools\" />
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <PackageReference>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.1.0" />
+    <PackageReference Include="PdbGit" Version="3.0.41" />
+  </ItemGroup>
+  <Target Name="PackBuildOutputs"
+          BeforeTargets="_GetPackageFiles"
+          DependsOnTargets="SatelliteDllsProjectOutputGroup;DebugSymbolsProjectOutputGroup">
+    <ItemGroup>
+      <Content Include="$(TargetPath)" Pack="true" PackagePath="analyzers\cs\" />
+    </ItemGroup>
+  </Target>
+</Project>
